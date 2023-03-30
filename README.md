@@ -8,7 +8,7 @@ asettamaan tavoitekulmaan.
 
 Toinen vaadittu ominaisuus oli ajastimen rakentaminen. Ajastin tallentaa ohjelman "standby" tilassa kulunutta aikaa ja tulostaa sitä sekunnin välein. Lisäominaisuutena ajan tallennus EEPROMilla Arduinon muistiin, jolloin aika säilyy vaikka laite resetoidaan tai virrat katkaistaan.
 
-Lisätehtävän oli koodata ohjaus DC moottorille. DC moottorin nopeus on säädettävissä joystickin Y-akselilla manuaalitilassa. Moottorinohjaukseen lisätty toiminnallisuutta
+Lisätehtävänä oli koodata ohjaus DC moottorille. DC moottorin nopeus on säädettävissä joystickin Y-akselilla manuaalitilassa. Moottorinohjaukseen lisätty toiminnallisuutta
 vaaditun lisäksi suunnanvaihdolla, joka kääntyy joystickin keskiasennon poikkeaman suunnalla, jolloin rele aktivoituu ja moottorin napaisuus kääntyy. 
  Moottorin ohjaukseen lisätty automaattiajolla nopeuden säätö sykeanturin avulla. Moottorin nopeus inkrementoidaan joystickin tai sykkeen asettamaan MOSFETille skaalattuun tavoitearvoon.
  
