@@ -71,7 +71,7 @@ void setup()
 void loop()
 {
   currentTime = millis();
-  joystickXVal = analogRead(A0);
+  joystickXVal = analogRead(A0);      // MUISTA TARKISTAA KÄYTETTÄVÄN JOYSTICKIN KALIBROINTI!!!!!!
   joystickYVal = analogRead(A1);
 
   if (systemState)
@@ -87,13 +87,19 @@ void loop()
       //      Serial.print("\t Motor Speed: ");
       //      Serial.println(abs(motorSpeed));
       //      Serial.print("\t");
-
     }
     else
     {
       manualServoDrive();
       manualMotorDrive();
-
+      Serial.print("Motor target speed: ");
+      Serial.print(motorTargetSpeed);
+      Serial.print("\t Motor Speed: ");
+      Serial.print(abs(motorSpeed));
+      Serial.print("\t motorDirection: ");
+      Serial.print(motorDirection);
+      Serial.print("\t RelayPin: ");
+      Serial.println(digitalRead(MOTOR_DIRECTION_RELAY_PIN));
     }
   }
   else
@@ -115,21 +121,15 @@ void manualMotorDrive()
 {
   bool joystickCentered = joystickXVal > 500 && joystickXVal < 530 && joystickYVal > 500 && joystickYVal < 530;
   motorTargetSpeed = map(joystickYVal, 0, 1023, -255, 255);
+  bool delayOK = currentTime - lastMotorIncrementTime > motorIncrementDelay;
 
-  if (currentTime - lastMotorIncrementTime > motorIncrementDelay)
+  if (delayOK)
   {
     if (abs(abs(motorSpeed) - motorTargetSpeed) > 3)
     {
-      if (motorSpeed < motorTargetSpeed)
-      {
-        motorSpeed += motorSpeedIncrement;
-      }
-      else if (motorSpeed > motorTargetSpeed)
-      {
-        motorSpeed -= motorSpeedIncrement;
-      }
+      motorSpeedControl();
     }
-    if (motorSpeed > 0 && motorSpeed < 10)
+    if (abs(motorSpeed) < 10)
     {
       if (motorTargetSpeed > 10)
       {
@@ -161,7 +161,7 @@ void manualMotorDrive()
 
 // Moottorin nopeuden säätö pulssianturilla. Laskee viidestä sydämenlyönnistä beatsPerMinute arvon ja skaalaa sen
 // moottorin nopeudenohjaukseksi FETille. Moottorin ohjauksessa nopeuden inkrementointi. Pyörimissuunta ainoastaan myötäpäivään.
-// Mikäli edellisestä 
+// Mikäli edellisestä lyönnistä yli 5sec, resettaa countterin ja pysäyttää moottorin.
 
 void motorPulseDrive()                                      // MUISTA INPUT_PULLUP!!!!!!
 {
@@ -200,14 +200,7 @@ void motorPulseDrive()                                      // MUISTA INPUT_PULL
   }
   if (delayOK && receivingPulse)
   {
-    if (motorSpeed < motorTargetSpeed)
-    {
-      motorSpeed += motorSpeedIncrement;
-    }
-    else if (motorSpeed > motorTargetSpeed)
-    {
-      motorSpeed -= motorSpeedIncrement;
-    }
+    motorSpeedControl();
     lastMotorIncrementTime = currentTime;
     analogWrite(FET_PIN, motorSpeed);
   }
@@ -217,6 +210,20 @@ void motorPulseDrive()                                      // MUISTA INPUT_PULL
   }
 }
 
+//  Moottorin nopeuden inkrementointi motorTargetSpeediä kohden, joka on asetettu joko manuaaliajossa joystickillä tai
+//  sykemittariajossa sykkeen perusteella
+
+void motorSpeedControl()
+{
+  if (motorSpeed < motorTargetSpeed)
+  {
+    motorSpeed += motorSpeedIncrement;
+  }
+  else if (motorSpeed > motorTargetSpeed)
+  {
+    motorSpeed -= motorSpeedIncrement;
+  }
+}
 // Servon manuaaliohjaus. Lisätty ryntäyksenesto automaattiajolta manuaalille vaihdon jälkeen.
 
 void manualServoDrive()
@@ -252,7 +259,6 @@ void manualServoDrive()
 
 void automaticServoDrive()
 {
-
   int servoIncrementDelay = map(joystickYVal, 0, 1023, 100, 500);
   bool delayOK = currentTime - lastServoIncrementTime > servoIncrementDelay;
   manualDriveRushStopper = 1;
