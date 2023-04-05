@@ -1,4 +1,4 @@
-# ArduinoHarkkatyö
+# Arduino harjoitustyö
 DC moottorin ja servon ohjaus joystickillä ja sykemittarilla
 
 Harjoitustyö on osa Elektroniikka ja Ohjelmointi kurssia koneautomaation insinööriopinnoissa.
