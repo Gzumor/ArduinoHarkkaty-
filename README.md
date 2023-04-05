@@ -12,4 +12,4 @@ Lisätehtävänä oli koodata ohjaus DC moottorille. DC moottorin nopeus on sä�
 vaaditun lisäksi suunnanvaihdolla, joka kääntyy joystickin keskiasennon poikkeaman suunnalla, jolloin rele aktivoituu ja moottorin napaisuus kääntyy. 
  Moottorin ohjaukseen lisätty automaattiajolla nopeuden säätö sykeanturin avulla. Moottorin nopeus inkrementoidaan joystickin tai sykkeen asettamaan MOSFETille skaalattuun tavoitearvoon.
  
-Koodissa ei käytetä runkoloopin lisäksi yhtään looppirakennetta tai delaytä, jolloin usen järjestelmän ajaminen yhtäaikaisesti on mahdollista.
+Koodissa ei käytetä runkoloopin lisäksi yhtään looppirakennetta tai delaytä, jolloin usean järjestelmän ajaminen Arduinolla yhtäaikaisesti on mahdollista.
